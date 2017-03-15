@@ -11,10 +11,14 @@ class Main(Frame):
         self.loginWindow = LoginWindow(self.master,self)
 
     def initApp(self,currentUser,currentPassword):
+        self.username = currentUser
+        self.password = currentPassword
         self.master.withdraw()
         self.mainWindow = Toplevel(self.master)
-        rssApp = MainWindow(self.mainWindow)
-        print(currentUser,currentPassword)
+        rssApp = MainWindow(self.mainWindow,self)
+
+    def getUserInfo(self):
+        return self.username,self.password
 
 # Only run if program is executed in this file
 def main():
