@@ -13,6 +13,7 @@ class Main(Frame):
     def initApp(self,currentUser,currentPassword):
         self.username = currentUser
         self.password = currentPassword
+        self.loginWindow.destroy()
         self.master.withdraw()
         self.mainWindow = Toplevel(self.master)
         rssApp = MainWindow(self.mainWindow,self)
@@ -20,6 +21,9 @@ class Main(Frame):
     def getUserInfo(self):
         return self.username,self.password
 
+    def initr(self):
+        self.loginWindow = Toplevel(self.master)
+        LoginWindow(self.loginWindow,self)
 # Only run if program is executed in this file
 def main():
     root = Tk()
