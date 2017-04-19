@@ -2,6 +2,7 @@ from Tkinter import *
 import tkFont
 import auth
 from login import LoginWindow
+from register import RegisterWindow
 from app import MainWindow
 
 class Main(Frame):
@@ -9,6 +10,7 @@ class Main(Frame):
         Frame.__init__(self, master)
         self.master = master
         self.loginWindow = LoginWindow(self.master,self)
+        
 
     def initApp(self,currentUser,currentPassword):
         self.username = currentUser
@@ -24,6 +26,13 @@ class Main(Frame):
     def initr(self):
         self.loginWindow = Toplevel(self.master)
         LoginWindow(self.loginWindow,self)
+
+    def loginToRegister(self):
+        self.loginWindow.destroy()
+        self.master.withdraw()
+        self.mainWindow = Toplevel(self.master)
+        registerWindow = RegisterWindow(self.mainWindow,self)
+
 # Only run if program is executed in this file
 def main():
     root = Tk()

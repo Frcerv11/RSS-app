@@ -98,7 +98,6 @@ class MainWindow(Frame):
             self.updateListbox()
         self.entry.delete(0, 'end')
 
-
     def storeUrls(self,url):
         feeds = feedparser.parse(url)
         self.sites[feeds['feed']['title']] = url

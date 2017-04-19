@@ -37,6 +37,25 @@ def deleteEntry(username,password,url):
 	cur.execute("DELETE FROM Feeds WHERE URL=? AND UserId IN (SELECT id FROM user WHERE id = ?)", (url,int(userId)))	
 	con.commit()
 	return True;
+
+def userExist(username):
+	cur = con.cursor() 
+	cur.execute('SELECT 1 from User where Username = "%s"' % (username))
+	if cur.fetchone():
+	    return True
+	else:
+	   	return False
+	
+def saveUser(username,password):
+	if(userExist(username) == False):
+		with con:
+			cur = con.cursor()    
+			cur.execute("INSERT INTO User (Username,Password) VALUES ( ?, ?)",(username, password))
+		return True
+	else:
+		return False
+
+
 # con = lite.connect('rss_app.db')
 # cur = con.cursor()  
 # c.executemany('INSERT INTO Feeds(UserId, URL) VALUES (?,?)', data_person_name)
