@@ -30,22 +30,33 @@ class MainWindow(Frame):
         for item in self.urls:
             self.storeUrls(item)
 
+    def dbSortName(self):
+        self.urls = []
+        self.sites = {}
+        self.urls = auth.sortByName(self.username,self.password)
+        for item in self.urls:
+            self.storeUrls(item)
+
     def updateListbox(self):
         self.titleList.delete(0, END)
         for key, value in self.sites.iteritems():
             self.titleList.insert(END, key)
 
     def initUI(self):
+
         self.parent.title("RSS APPLICATION")
         self.pack(fill=BOTH, expand=True)
         
         frame1 = Frame(self)
         frame1.pack(side=LEFT,fill=BOTH)
         
-        lbl1 = Label(frame1, text="Welcome")
+        lbl1 = Label(frame1)
+        lbl1['text'] = ("Welcome " +   self.username).title();
         lbl1.pack()           
+        
        
-        self.button = Button(frame1)
+
+        self.button = Button(frame1,height=2)
         self.button['text'] = 'Sign Out'
         self.button['command'] = self.closeWindow
         self.button.pack()
@@ -59,6 +70,14 @@ class MainWindow(Frame):
         self.entryInput.pack(side=RIGHT)
         feedEntry.pack(expand=True)
 
+        sortingOptions = Frame(frame1)
+        self.buttonSort = Button(sortingOptions,height=2)
+        self.buttonSort['text'] = 'Name'
+        self.buttonSort['command'] = self.sortByName
+        # self.entryInput['command'] = self.storeEntry
+        self.buttonSort.pack()
+        sortingOptions.pack(expand=True)
+
         self.titleList = Listbox(frame1)
         self.updateListbox()
         self.titleList.bind('<<ListboxSelect>>',self.displayArticles)
@@ -71,7 +90,6 @@ class MainWindow(Frame):
 
         frame2 = Frame(self)
         frame2.pack(side=RIGHT,fill=BOTH)
-
         self.articleList = Listbox(frame2,width=60, height=5)
         self.articleList.bind('<<ListboxSelect>>',self.displayArticleContent)
         self.articleList.pack()
@@ -118,9 +136,12 @@ class MainWindow(Frame):
         selection=(self.articleList.get(self.articleList.curselection()))
         selection.encode('utf-8')
         selectionIndex=self.articleList.curselection()
-        feads = feedparser.parse(self.articles[selection])
         temp =  "Title: " + feads.entries[selectionIndex[0]].title + "\n"
         temp += "Description: " + feads.entries[selectionIndex[0]].description + "\n" 
         temp += "Link: " + feads.entries[selectionIndex[0]].link
         soup = BeautifulSoup(temp,"html.parser")
         self.contentText.insert(END, soup.get_text())
+
+    def sortByName(self):
+        self.dbSortName()
+        self.updateEntries()

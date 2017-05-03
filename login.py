@@ -30,7 +30,7 @@ class LoginWindow(Frame):
         self.passwordText['text'] = 'Password'
         self.passwordText.pack(anchor=W)
 
-        self.passwordEntry = Entry(self.frame)
+        self.passwordEntry = Entry(self.frame,show="*")
         self.passwordEntry.pack(anchor=W)
         
         self.button = Button(self.frame)

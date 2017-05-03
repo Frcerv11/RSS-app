@@ -55,7 +55,11 @@ def saveUser(username,password):
 	else:
 		return False
 
-
+def sortByName(user,pswd):
+	con.row_factory = lambda cursor, row: row[1]
+	c = con.cursor()
+	ids = c.execute('SELECT f.userId, f.url FROM feeds f WHERE f.userId IN(SELECT id FROM user WHERE id = f.userId AND Username="%s" AND Password="%s")' % (user, pswd)).fetchall()
+	return ids
 # con = lite.connect('rss_app.db')
 # cur = con.cursor()  
 # c.executemany('INSERT INTO Feeds(UserId, URL) VALUES (?,?)', data_person_name)
