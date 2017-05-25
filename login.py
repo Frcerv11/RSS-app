@@ -11,6 +11,7 @@ class LoginWindow(Frame):
         self.master = master
         self.initUI()
 
+    #Login GUI
     def initUI(self):
         self.frame = Frame(self.master, width=100, height = 600)
 
@@ -57,6 +58,7 @@ class LoginWindow(Frame):
         else:
             self.alert['text'] = 'Login failed'
 
+    #Switch to register window
     def register(self):
         self.controller.loginToRegister()
 

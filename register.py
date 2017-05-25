@@ -2,7 +2,7 @@ from Tkinter import *
 import tkFont
 import auth
 
-#Login Window
+#Registration Window
 class RegisterWindow(Frame):
     def __init__(self,master,controller):
         Frame.__init__(self,master)
@@ -13,7 +13,7 @@ class RegisterWindow(Frame):
 
     def initUI(self):
         self.frame = Frame(self.master, width=100, height = 600)
-
+        # GUI setup
         self.title = Label(self.frame)
         self.title['font'] = self.customFont
         self.title['text'] = 'Register'
@@ -48,6 +48,7 @@ class RegisterWindow(Frame):
 
         self.frame.grid(row=0, column=0, padx=100, pady=25)
 
+    # Process and checks if user registration is successful 
     def processUser(self):
         if(auth.saveUser(self.uNameEntry.get(),self.passwordEntry.get())):
              self.alert['text'] = 'Registration Successful'

@@ -14,15 +14,22 @@ class MainWindow(Frame):
         Frame.__init__(self, parent)
         self.controller = controller
         self.parent = parent
-        self.sites = {}  
+        self.sites = {}
         self.articles = {}
+        # Get username and password inputted in login screen
         self.username = self.controller.getUserInfo()[0]
         self.password = self.controller.getUserInfo()[1]
+
+        #Get list of users' rss feed urls
         self.urls = auth.getFeedUrls(self.username,self.password)
+
+        #Parse urls through FeedParser
         for item in self.urls:
             self.storeUrls(item)
-        self.initUI()
 
+        self.initUI()
+ 
+    #Gets called on after entries are removed or added
     def updateEntries(self):
         self.urls = []
         self.sites = {}
@@ -30,18 +37,13 @@ class MainWindow(Frame):
         for item in self.urls:
             self.storeUrls(item)
 
-    def dbSortName(self):
-        self.urls = []
-        self.sites = {}
-        self.urls = auth.sortByName(self.username,self.password)
-        for item in self.urls:
-            self.storeUrls(item)
-
+    #Refresh list box component 
     def updateListbox(self):
         self.titleList.delete(0, END)
         for key, value in self.sites.iteritems():
             self.titleList.insert(END, key)
 
+    #App GUI
     def initUI(self):
 
         self.parent.title("RSS APPLICATION")
@@ -70,14 +72,6 @@ class MainWindow(Frame):
         self.entryInput.pack(side=RIGHT)
         feedEntry.pack(expand=True)
 
-        sortingOptions = Frame(frame1)
-        self.buttonSort = Button(sortingOptions,height=2)
-        self.buttonSort['text'] = 'Name'
-        self.buttonSort['command'] = self.sortByName
-        # self.entryInput['command'] = self.storeEntry
-        self.buttonSort.pack()
-        sortingOptions.pack(expand=True)
-
         self.titleList = Listbox(frame1)
         self.updateListbox()
         self.titleList.bind('<<ListboxSelect>>',self.displayArticles)
@@ -98,16 +92,19 @@ class MainWindow(Frame):
 
         self.contentText.pack()
 
+    #Close this window and switch to login window
     def closeWindow(self):
         self.parent.withdraw()
         self.controller.initr()
 
+    #Save RSS feed url and if it processes successfully update application 
     def storeEntry(self):
         if(auth.saveEntry(self.username,self.password,self.entry.get())):
             self.updateEntries()
             self.updateListbox()
         self.entry.delete(0, 'end')
     
+    #Remove RSS feed url and if it processes successfully update application 
     def removeEntry(self):
         selection=str((self.titleList.get(self.titleList.curselection())))
         siteUrl = self.sites[selection]
@@ -115,6 +112,7 @@ class MainWindow(Frame):
             self.updateEntries()
             self.updateListbox()
         self.entry.delete(0, 'end')
+
 
     def storeUrls(self,url):
         feeds = feedparser.parse(url)
@@ -136,12 +134,9 @@ class MainWindow(Frame):
         selection=(self.articleList.get(self.articleList.curselection()))
         selection.encode('utf-8')
         selectionIndex=self.articleList.curselection()
+        feads = feedparser.parse(self.articles[selection])
         temp =  "Title: " + feads.entries[selectionIndex[0]].title + "\n"
         temp += "Description: " + feads.entries[selectionIndex[0]].description + "\n" 
         temp += "Link: " + feads.entries[selectionIndex[0]].link
         soup = BeautifulSoup(temp,"html.parser")
         self.contentText.insert(END, soup.get_text())
-
-    def sortByName(self):
-        self.dbSortName()
-        self.updateEntries()

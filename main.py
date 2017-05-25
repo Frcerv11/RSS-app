@@ -9,9 +9,9 @@ class Main(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
         self.master = master
+        #Display login w-indow
         self.loginWindow = LoginWindow(self.master,self)
-        
-
+    #
     def initApp(self,currentUser,currentPassword):
         self.username = currentUser
         self.password = currentPassword
